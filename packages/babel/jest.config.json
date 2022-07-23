@@ -1,0 +1,20 @@
+{
+  "preset": "ts-jest",
+  "testEnvironment": "node",
+  "testRegex": "/test/.*\\.spec\\.ts",
+  "setupFilesAfterEnv": [
+    "<rootDir>/test/jest.setup.ts"
+  ],
+  "moduleDirectories": [
+    "node_modules",
+    "<rootDir>/src"
+  ],
+  "moduleNameMapper": {
+    "^babel-plugin-react-native-css$": "<rootDir>/src"
+  },
+  "coveragePathIgnorePatterns": [
+    ".vscode",
+    "node_modules/",
+    "dist/"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "extends": "../../../tsconfig.json",
+  "include": [
+    "after/*.ts",
+    "before/*.ts",
+    "test.d.ts"
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "noUnusedLocals": false,
+    "strict": false,
+    "suppressImplicitAnyIndexErrors": false,
+    "isolatedModules": false
+  }
+}

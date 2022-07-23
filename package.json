@@ -1,0 +1,22 @@
+{
+  "name": "@suyongs/react-native-css",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test:babel": "npm run test -w @suyongs/babel-plugin-react-native-css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@suyongs/babel-plugin-react-native-css": "^0.1.0",
+    "@types/jest": "^28.1.6",
+    "jest": "^28.1.3",
+    "ts-jest": "^28.0.7",
+    "typescript": "^4.7.4"
+  },
+  "workspaces": [
+    "./packages/*"
+  ]
+}

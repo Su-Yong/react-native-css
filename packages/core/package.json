@@ -1,0 +1,19 @@
+{
+  "name": "@suyongs/react-native-css",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Su-Yong",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.15",
+    "@types/react-native": "^0.69.3"
+  }
+}
