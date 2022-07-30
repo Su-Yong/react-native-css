@@ -1,3 +1,4 @@
+import { Element } from '../css/model/declaration';
 import Processor from './processor';
 
 const webkitVendor = /^\-webkit\-/;
@@ -5,12 +6,11 @@ const mozVendor = /^\-moz\-/;
 const msVendor = /^\-ms\-/;
 const operaVendor = /^\-o\-/;
 
-export const VendorIgnoreProcessor: Processor = {
-  process(element) {
-    if (element.type !== 'decl') return element;
-    if (Array.isArray(element.props)) return element;
+export class VendorIgnoreProcessor implements Processor {
+  process(element: Element): Element | Element[] {
+    if (element.type !== 'declaration') return element;
 
-    element.props = element.props
+    element.property = element.property
       .replace(webkitVendor, '')
       .replace(mozVendor, '')
       .replace(msVendor, '')

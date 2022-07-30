@@ -14,6 +14,7 @@
     "prettier": "^2.7.1"
   },
   "dependencies": {
+    "@suyongs/react-native-css": "file:../core",
     "@babel/core": "^7.18.9",
     "stylis": "^4.1.1"
   }
