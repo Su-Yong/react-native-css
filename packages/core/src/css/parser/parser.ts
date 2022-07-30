@@ -1,9 +1,9 @@
-import { BaseElement, DeclarationElement, declarationRegex, isDeclarationElement } from '../model/declaration';
+import { Element, DeclarationElement, declarationRegex, isDeclarationElement } from '../model/element';
 import { tokenizeValue } from '../tokenizer/tokenizer';
 import { parseValue } from './value/valueParser';
 
 const commentRegex = /\/\*((?:(?:.|\s)(?!\*\/))+.|\s)\*\//g;
-export const parse = (str: string) => {
+export const parse = (str: string): Element[] => {
   const groups = tokenizeValue(
     str,
     {
@@ -20,7 +20,7 @@ export const parse = (str: string) => {
     .flatMap((it) => it.replace(commentRegex, ''))
     .map((it) => it.trim());
 
-  const elements: BaseElement<string>[] = [];
+  const elements: Element[] = [];
   groups.forEach((raw) => {
     if (isDeclarationElement(raw)) {
       const [_, property, value] = Array.from(raw.match(declarationRegex) ?? []);

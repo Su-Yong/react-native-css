@@ -1,4 +1,4 @@
-import { Element } from '../css/model/declaration';
+import { Element } from '../css/model/element';
 
 import Processor from './processor';
 

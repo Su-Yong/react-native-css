@@ -1,4 +1,4 @@
-import { css } from '../src';
+import { css } from '../src/css';
 
 describe('css runtime', () => {
   it('normal', () => {

@@ -2,7 +2,7 @@
   "name": "@suyongs/react-native-css",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.ts",
   "scripts": {
     "test": "jest"
   },

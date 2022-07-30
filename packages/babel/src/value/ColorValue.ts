@@ -1,1 +1,0 @@
-// https://developer.mozilla.org/ko/docs/Web/CSS/color_value

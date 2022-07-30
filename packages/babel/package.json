@@ -10,12 +10,10 @@
   "license": "MIT",
   "devDependencies": {
     "@types/babel__core": "^7.1.19",
-    "@types/stylis": "^4.0.2",
     "prettier": "^2.7.1"
   },
   "dependencies": {
-    "@suyongs/react-native-css": "file:../core",
     "@babel/core": "^7.18.9",
-    "stylis": "^4.1.1"
+    "@suyongs/react-native-css": "file:../core"
   }
 }

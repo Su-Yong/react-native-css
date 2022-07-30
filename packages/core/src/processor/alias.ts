@@ -1,5 +1,5 @@
 import { Value, CSSType } from '../css/model/value';
-import { Element } from '../css/model/declaration';
+import { Element } from '../css/model/element';
 
 import Processor from './processor';
 

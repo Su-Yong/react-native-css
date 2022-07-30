@@ -2,26 +2,21 @@ import {
   PluginObj, types
 } from '@babel/core';
 import { getUniqueId } from './utils/uniqueId';
-import { compile } from 'stylis';
-import DeclarationProcessor from './process/DeclarationProcessor';
-import LengthValue from './value/LengthValue';
-import AngleValue from './value/AngleValue';
-import TimeValue from './value/TimeValue';
-import { ValueElement } from './types/tree';
 import { extractExpression, isExpression } from './utils/isExpression';
-import ExpressionValue from './value/ExpressionValue';
+import { DehyphenProcessor, AliasProcessor, Value } from '@suyongs/react-native-css';
+import { viewAliasMatcher } from '@suyongs/react-native-css/src/processor/alias/view';
+
+import { parse, Element } from '@suyongs/react-native-css';
+import valueResolver, { ValueResolverContext } from './resolver/valueResolver';
 
 declare type BabelTypes = typeof import('@babel/types');
 type PluginType = ({ types }: { types: BabelTypes }) => PluginObj;
 
 const plugin: PluginType = ({ types: t }) => {
-  let declarationProcessor = new DeclarationProcessor();
-  declarationProcessor.use(ExpressionValue); // register first
-
-  declarationProcessor.use(LengthValue);
-  declarationProcessor.use(AngleValue);
-  declarationProcessor.use(TimeValue);
-  // declarationProcessor.use(VariableValue);
+  const processors = [
+    new DehyphenProcessor(),
+    new AliasProcessor(viewAliasMatcher),
+  ];
 
   return {
     visitor: {
@@ -29,52 +24,52 @@ const plugin: PluginType = ({ types: t }) => {
         if (path.node.tag.type === 'Identifier' && path.node.tag.name === 'css') {
           let result = '';
 
-          const interpolate = new Map<string, typeof path.node.quasi.expressions[0]>();
+          const interpolate = new Map<string, types.Expression>();
           path.node.quasi.quasis.forEach((quasi, index) => {
             let str = quasi.value.raw;
             
             const expression = path.node.quasi.expressions[index];
             if (expression) {
-              const id = getUniqueId();
+              const id = '--' + getUniqueId();
               const placeholder = `expression(${id})`;
               str += placeholder;
 
+              if (t.isTSType(expression)) throw Error('interpolator must be "Expression" not "TSType"');
               interpolate.set(id, expression);
             }
             
             result += str;
           });
 
-          const ast = compile(result);
-          console.log('ast', ast);
+          let ast: Element[] = parse(result);
+          processors.forEach((processor) => {
+            let newTree: Element[] = [];
 
+            ast.forEach((element) => {
+              const elements = processor.process(element);
+
+              if (Array.isArray(elements)) newTree.push(...elements);
+              else newTree.push(elements);
+            });
+
+            ast = newTree;
+          });
+
+          console.log('ast', JSON.stringify(ast, null, 2));
+
+          const resolverContext: ValueResolverContext = {
+            type: t,
+            expressionMapper: interpolate,
+          };
           const properties: types.ObjectProperty[] = [];
           ast.forEach((node) => {
-            if (node.type === 'decl') {
-              const key = Array.isArray(node.props) ? node.props.at(-1) : node.props;
-              let value: ValueElement;
+            if (node.type === 'declaration') {
+              if (node.values.length > 1) throw Error(`React Native Style can have only one parameter (${node.values.length} parameters provided)`);
 
-              if (typeof node.children === 'string') {
-                if (isExpression(node.children)) {
-                  const id = extractExpression(node.children);
-                  const expression = interpolate.get(id) as types.Expression;
+              const key = node.property;
+              const value = valueResolver(node.values[0], resolverContext);
 
-                  value = {
-                    type: 'expression',
-                    value: expression,
-                  };
-                } else {
-                  value = { type: 'string', value: node.children };
-                }
-              }
-              else throw Error('Unsupport type');
-
-              properties.push(
-                t.objectProperty(
-                  t.identifier(key!),
-                  declarationProcessor.process(value),
-                ),
-              );
+              properties.push(t.objectProperty(t.identifier(key), value));
             }
           });
 

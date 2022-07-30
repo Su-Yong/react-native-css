@@ -1,4 +1,4 @@
-import { Element } from '../../css/model/declaration';
+import { Element } from '../../css/model/element';
 import { ColorType, IdentType, LengthType } from '../../css/model/value';
 import { AliasMap, createAliasMatcher } from '../alias';
 

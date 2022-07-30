@@ -1,4 +1,4 @@
-import { BaseValue } from './value';
+import { BaseValue, Value } from './value';
 
 export type PercentageType = '<percentage>';
 export type FunctionType = '<function>';
@@ -10,7 +10,7 @@ export interface PercentageValue extends BaseValue<PercentageType> {
   value: number;
 }
 
-export interface FunctionValue<Parameters extends BaseValue<string>[] = BaseValue<string>[]> extends BaseValue<FunctionType> {
+export interface FunctionValue<Parameters extends BaseValue<string>[] = Value[]> extends BaseValue<FunctionType> {
   name: string;
   parameters: Parameters;
 }
