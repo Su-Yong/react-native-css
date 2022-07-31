@@ -1,4 +1,4 @@
-import { Element, DeclarationElement, declarationRegex, isDeclarationElement } from '../model/element';
+import { Element, DeclarationElement, declarationRegex, isDeclarationElement, isRuleElement, ruleRegex, RuleElement } from '../model/element';
 import { tokenizeValue } from '../tokenizer/tokenizer';
 import { parseValue } from './value/valueParser';
 
@@ -33,6 +33,18 @@ export const parse = (str: string): Element[] => {
       };
 
       elements.push(declarationElement);
+    }
+
+    if (isRuleElement(raw)) {
+      const [_, selector, body] = Array.from(raw.match(ruleRegex) ?? []);
+      const ruleElement: RuleElement = {
+        type: 'rule',
+        raw,
+        selector: selector.trim(),
+        elements: parse(body.trim()),
+      };
+
+      elements.push(ruleElement);
     }
   });
 
