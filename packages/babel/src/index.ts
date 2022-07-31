@@ -1,4 +1,5 @@
 import {
+  NodePath,
   PluginObj, types
 } from '@babel/core';
 import { getUniqueId } from './utils/uniqueId';
@@ -8,6 +9,7 @@ import { viewAliasMatcher } from '@suyongs/react-native-css/src/processor/alias/
 
 import { parse, Element } from '@suyongs/react-native-css';
 import valueResolver, { ValueResolverContext } from './resolver/valueResolver';
+import { Program } from '@babel/types';
 
 declare type BabelTypes = typeof import('@babel/types');
 type PluginType = ({ types }: { types: BabelTypes }) => PluginObj;
@@ -18,8 +20,13 @@ const plugin: PluginType = ({ types: t }) => {
     new AliasProcessor(viewAliasMatcher),
   ];
 
+  let root: NodePath<Program> | null = null;
+
   return {
     visitor: {
+      Program(path) {
+        root = path;
+      },
       TaggedTemplateExpression(path) {
         if (path.node.tag.type === 'Identifier' && path.node.tag.name === 'css') {
           let result = '';
@@ -67,8 +74,9 @@ const plugin: PluginType = ({ types: t }) => {
               if (node.values.length > 1) throw Error(`React Native Style can have only one parameter (${node.values.length} parameters provided)`);
 
               const key = node.property;
-              const value = valueResolver(node.values[0], resolverContext);
+              const [value, runner] = valueResolver(node.values[0], resolverContext);
 
+              if (runner && root) runner(root, path);
               properties.push(t.objectProperty(t.identifier(key), value));
             }
           });

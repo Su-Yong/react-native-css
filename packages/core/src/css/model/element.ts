@@ -10,7 +10,8 @@ export interface DeclarationElement extends BaseElement<'declaration'> {
   values: Value[];
 }
 export interface RuleElement extends BaseElement<'rule'> {
-  declarations: DeclarationElement[];
+  selector: string;
+  elements: Element[];
 }
 export interface CommentElement extends BaseElement<'comment'> {
   comment: string;
@@ -18,7 +19,7 @@ export interface CommentElement extends BaseElement<'comment'> {
 
 export type Element = DeclarationElement | RuleElement | CommentElement;
 
-export const declarationRegex = /([a-zA-Z\-]+)\s*:\s*([^:]+)$/;
+export const declarationRegex = /([a-zA-Z\-]+)\s*:\s*([^:{}]+)$/;
 export const isDeclarationElement = (str: string): boolean => {
   return !!str.match(declarationRegex);
 };
