@@ -1,14 +1,7 @@
-import { Element } from '../../css/model/element';
-import { ColorType, IdentType, LengthType } from '../../css/model/value';
-import { AliasMap, createAliasMatcher } from '../alias';
-
-const keyChangeExecutor = (key: string) => (element: Element): Element => {
-  if (element.type === 'declaration') {
-    element.property = key;
-  }
-
-  return element;
-};
+import { ColorType, IdentType, LengthType, PercentageType } from '../../css/model/value';
+import { AliasMap, createAliasMatcher, keyChangeExecutor } from '../alias';
+import { borderAlias } from './border';
+import { createDirectionalAlias } from './directional';
 
 const viewAlias: AliasMap = {
   background: [
@@ -30,6 +23,54 @@ const viewAlias: AliasMap = {
       types: [LengthType],
       executor: keyChangeExecutor('borderWidth'),
     },
+    ...borderAlias,
+  ],
+  borderWidth: createDirectionalAlias(
+    (direction) => `border${direction[0].toUpperCase()}${direction.slice(1)}Width`,
+    (direction) => `border-${direction}-width`,
+  ),
+  padding: createDirectionalAlias(
+    (direction) => `padding${direction[0].toUpperCase()}${direction.slice(1)}`,
+    (direction) => `padding-${direction}`,
+  ),
+  margin: createDirectionalAlias(
+    (direction) => `margin${direction[0].toUpperCase()}${direction.slice(1)}`,
+    (direction) => `margin-${direction}`,
+  ),
+  inset: [
+    {
+      types: [[LengthType, PercentageType]],
+      executor: (element) => [
+        {
+          type: 'declaration',
+          raw: `top: ${element.values[0].raw}`,
+          property: 'top',
+          values: [element.values[0]],
+        },
+        {
+          type: 'declaration',
+          raw: `right: ${element.values[0].raw}`,
+          property: 'right',
+          values: [element.values[0]],
+        },
+        {
+          type: 'declaration',
+          raw: `bottom: ${element.values[0].raw}`,
+          property: 'bottom',
+          values: [element.values[0]],
+        },
+        {
+          type: 'declaration',
+          raw: `left: ${element.values[0].raw}`,
+          property: 'left',
+          values: [element.values[0]],
+        },
+      ],
+    },
+    ...createDirectionalAlias(
+      (direction) => direction,
+      (direction) => direction,
+    ),
   ],
 };
 
