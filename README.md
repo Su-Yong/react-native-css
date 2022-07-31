@@ -146,3 +146,9 @@ const Button = () => {
 | [![Su-Yong](https://avatars.githubusercontent.com/u/13764936?v=4&s=128)](https://github.com/Su-Yong) |
 | ------- |
 | Su-Yong |
+
+# Roadmap
+ - [X] Babel plugin
+ - [X] Support shorthand property
+ - [ ] Support dynamic properies
+ - [ ] Integrate react-native-reanimated
