@@ -1,6 +1,37 @@
 import { css } from '../src';
 
 describe('shorthand', () => {
+  it('padding', () => {
+    const padding1 = css`
+      padding: 4px 10px;
+    `;
+    const padding2 = css`
+      padding: 4px 5% 6px;
+    `;
+    const padding3 = css`
+      padding: 1px 2px 3px 4px;
+    `;
+
+    expect(padding1).toEqual({
+      paddingTop: 4,
+      paddingBottom: 4,
+      paddingLeft: 10,
+      paddingRight: 10,
+    });
+    expect(padding2).toEqual({
+      paddingTop: 4,
+      paddingBottom: 6,
+      paddingLeft: '5%',
+      paddingRight: '5%',
+    });
+    expect(padding3).toEqual({
+      paddingTop: 1,
+      paddingBottom: 3,
+      paddingLeft: 4,
+      paddingRight: 2,
+    });
+  });
+
   it('border', () => {
     const border1 = css`
       border: solid 2px red;
@@ -56,6 +87,37 @@ describe('shorthand', () => {
       borderBottomWidth: 3,
       borderLeftWidth: 4,
       borderRightWidth: 2,
+    });
+  });
+
+  it('margin', () => {
+    const margin1 = css`
+      margin: 4px 10px;
+    `;
+    const margin2 = css`
+    margin: 4px 5% 6px;
+    `;
+    const margin3 = css`
+    margin: 1px 2px 3px 4px;
+    `;
+
+    expect(margin1).toEqual({
+      marginTop: 4,
+      marginBottom: 4,
+      marginLeft: 10,
+      marginRight: 10,
+    });
+    expect(margin2).toEqual({
+      marginTop: 4,
+      marginBottom: 6,
+      marginLeft: '5%',
+      marginRight: '5%',
+    });
+    expect(margin3).toEqual({
+      marginTop: 1,
+      marginBottom: 3,
+      marginLeft: 4,
+      marginRight: 2,
     });
   });
 });

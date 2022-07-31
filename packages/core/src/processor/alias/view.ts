@@ -1,7 +1,7 @@
-import { DeclarationElement, Element } from '../../css/model/element';
+import { DeclarationElement } from '../../css/model/element';
 import { ColorType, ColorValue, IdentType, IdentValue, LengthType, LengthValue, PercentageType, PercentageValue, Value } from '../../css/model/value';
-import { identValue } from '../../css/parser/value/keyword';
-import { AliasExecutor, AliasMap, AliasRule, createAliasMatcher, keyChangeExecutor } from '../alias';
+import { AliasMap, AliasRule, createAliasMatcher, keyChangeExecutor } from '../alias';
+import { createDirectionalAlias } from './directional';
 
 const borderExeceutor = (style?: IdentValue, width?: LengthValue | PercentageValue, color?: ColorValue) => {
   const result: DeclarationElement[] = [];
@@ -94,7 +94,6 @@ borderAliasTypes.forEach((first) => {
   });
 });
 
-
 const viewAlias: AliasMap = {
   background: [
     {
@@ -117,113 +116,18 @@ const viewAlias: AliasMap = {
     },
     ...borderAlias,
   ],
-  borderWidth: [
-    {
-      types: [[LengthType, PercentageType], [LengthType, PercentageType]],
-      executor: (element) => {
-        const vertical = element.values[0];
-        const horizontal = element.values[1];
-
-        return [
-          {
-            type: 'declaration',
-            raw: `border-bottom-width: ${vertical.raw}`,
-            property: 'borderBottomWidth',
-            values: [vertical],
-          },
-          {
-            type: 'declaration',
-            raw: `border-top-width: ${vertical.raw}`,
-            property: 'borderTopWidth',
-            values: [vertical],
-          },
-          {
-            type: 'declaration',
-            raw: `border-left-width: ${horizontal.raw}`,
-            property: 'borderLeftWidth',
-            values: [horizontal],
-          },
-          {
-            type: 'declaration',
-            raw: `border-right-width: ${horizontal.raw}`,
-            property: 'borderRightWidth',
-            values: [horizontal],
-          },
-        ];
-      },
-    },
-    {
-      types: [[LengthType, PercentageType], [LengthType, PercentageType], [LengthType, PercentageType]],
-      executor: (element) => {
-        const top = element.values[0];
-        const horizontal = element.values[1];
-        const bottom = element.values[2];
-
-        return [
-          {
-            type: 'declaration',
-            raw: `border-bottom-width: ${bottom.raw}`,
-            property: 'borderBottomWidth',
-            values: [bottom],
-          },
-          {
-            type: 'declaration',
-            raw: `border-top-width: ${top.raw}`,
-            property: 'borderTopWidth',
-            values: [top],
-          },
-          {
-            type: 'declaration',
-            raw: `border-left-width: ${horizontal.raw}`,
-            property: 'borderLeftWidth',
-            values: [horizontal],
-          },
-          {
-            type: 'declaration',
-            raw: `border-right-width: ${horizontal.raw}`,
-            property: 'borderRightWidth',
-            values: [horizontal],
-          },
-        ];
-      },
-    },
-    {
-      types: [[LengthType, PercentageType], [LengthType, PercentageType], [LengthType, PercentageType], [LengthType, PercentageType]],
-      executor: (element) => {
-        const top = element.values[0];
-        const right = element.values[1];
-        const bottom = element.values[2];
-        const left = element.values[3];
-
-        return [
-          {
-            type: 'declaration',
-            raw: `border-bottom-width: ${bottom.raw}`,
-            property: 'borderBottomWidth',
-            values: [bottom],
-          },
-          {
-            type: 'declaration',
-            raw: `border-top-width: ${top.raw}`,
-            property: 'borderTopWidth',
-            values: [top],
-          },
-          {
-            type: 'declaration',
-            raw: `border-left-width: ${left.raw}`,
-            property: 'borderLeftWidth',
-            values: [left],
-          },
-          {
-            type: 'declaration',
-            raw: `border-right-width: ${right.raw}`,
-            property: 'borderRightWidth',
-            values: [right],
-          },
-        ];
-      },
-    },
-  ],
+  borderWidth: createDirectionalAlias(
+    (direction) => `border${direction[0].toUpperCase()}${direction.slice(1)}Width`,
+    (direction) => `border-${direction}-width`,
+  ),
+  padding: createDirectionalAlias(
+    (direction) => `padding${direction[0].toUpperCase()}${direction.slice(1)}`,
+    (direction) => `padding-${direction}`,
+  ),
+  margin: createDirectionalAlias(
+    (direction) => `margin${direction[0].toUpperCase()}${direction.slice(1)}`,
+    (direction) => `margin-${direction}`,
+  ),
 };
 
 export const viewAliasMatcher = createAliasMatcher(viewAlias);
