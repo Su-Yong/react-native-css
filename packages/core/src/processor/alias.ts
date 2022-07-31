@@ -1,12 +1,12 @@
 import { Value, CSSType } from '../css/model/value';
-import { Element } from '../css/model/element';
+import { DeclarationElement, Element } from '../css/model/element';
 
 import Processor from './processor';
 
-export type AliasExecutor = (element: Element) => Element[] | Element;
+export type AliasExecutor = (element: DeclarationElement) => Element[] | Element;
 export type AliasMatcher = (key: string, values: Value[]) => AliasExecutor | null;
 export type AliasRule = {
-  types: CSSType[];
+  types: (CSSType[] | CSSType)[];
   executor: AliasExecutor;
 };
 export type AliasMap = Record<string, AliasRule[]>;
@@ -18,12 +18,24 @@ export const createAliasMatcher = (aliasMap: AliasMap): AliasMatcher => (key, va
   
   let result = null;
   matcher.forEach(({ types, executor }) => {
-    if (types.some((it, index) => values[index].type !== it)) return;
+    if (
+      types.some((type, index) => {
+        if (Array.isArray(type)) return type.every((it) => it !== values[index]?.type)
+        
+        return values[index]?.type !== type;
+      })
+    ) return;
 
     result = executor;
   });
 
   return result;
+};
+
+export const keyChangeExecutor = (key: string) => (element: DeclarationElement): Element => {
+  element.property = key;
+
+  return element;
 };
 
 export class AliasProcessor implements Processor {
