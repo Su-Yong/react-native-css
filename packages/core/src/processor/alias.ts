@@ -20,8 +20,10 @@ export const createAliasMatcher = (aliasMap: AliasMap): AliasMatcher => (key, va
   matcher.forEach(({ types, executor }) => {
     if (
       types.some((type, index) => {
-        if (Array.isArray(type)) return type.every((it) => it !== values[index]?.type)
-        
+        if (Array.isArray(type)) {
+          return type.every((it) => it !== values[index]?.type);
+        }
+
         return values[index]?.type !== type;
       })
     ) return;

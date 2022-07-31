@@ -117,6 +117,113 @@ const viewAlias: AliasMap = {
     },
     ...borderAlias,
   ],
+  borderWidth: [
+    {
+      types: [[LengthType, PercentageType], [LengthType, PercentageType]],
+      executor: (element) => {
+        const vertical = element.values[0];
+        const horizontal = element.values[1];
+
+        return [
+          {
+            type: 'declaration',
+            raw: `border-bottom-width: ${vertical.raw}`,
+            property: 'borderBottomWidth',
+            values: [vertical],
+          },
+          {
+            type: 'declaration',
+            raw: `border-top-width: ${vertical.raw}`,
+            property: 'borderTopWidth',
+            values: [vertical],
+          },
+          {
+            type: 'declaration',
+            raw: `border-left-width: ${horizontal.raw}`,
+            property: 'borderLeftWidth',
+            values: [horizontal],
+          },
+          {
+            type: 'declaration',
+            raw: `border-right-width: ${horizontal.raw}`,
+            property: 'borderRightWidth',
+            values: [horizontal],
+          },
+        ];
+      },
+    },
+    {
+      types: [[LengthType, PercentageType], [LengthType, PercentageType], [LengthType, PercentageType]],
+      executor: (element) => {
+        const top = element.values[0];
+        const horizontal = element.values[1];
+        const bottom = element.values[2];
+
+        return [
+          {
+            type: 'declaration',
+            raw: `border-bottom-width: ${bottom.raw}`,
+            property: 'borderBottomWidth',
+            values: [bottom],
+          },
+          {
+            type: 'declaration',
+            raw: `border-top-width: ${top.raw}`,
+            property: 'borderTopWidth',
+            values: [top],
+          },
+          {
+            type: 'declaration',
+            raw: `border-left-width: ${horizontal.raw}`,
+            property: 'borderLeftWidth',
+            values: [horizontal],
+          },
+          {
+            type: 'declaration',
+            raw: `border-right-width: ${horizontal.raw}`,
+            property: 'borderRightWidth',
+            values: [horizontal],
+          },
+        ];
+      },
+    },
+    {
+      types: [[LengthType, PercentageType], [LengthType, PercentageType], [LengthType, PercentageType], [LengthType, PercentageType]],
+      executor: (element) => {
+        const top = element.values[0];
+        const right = element.values[1];
+        const bottom = element.values[2];
+        const left = element.values[3];
+
+        return [
+          {
+            type: 'declaration',
+            raw: `border-bottom-width: ${bottom.raw}`,
+            property: 'borderBottomWidth',
+            values: [bottom],
+          },
+          {
+            type: 'declaration',
+            raw: `border-top-width: ${top.raw}`,
+            property: 'borderTopWidth',
+            values: [top],
+          },
+          {
+            type: 'declaration',
+            raw: `border-left-width: ${left.raw}`,
+            property: 'borderLeftWidth',
+            values: [left],
+          },
+          {
+            type: 'declaration',
+            raw: `border-right-width: ${right.raw}`,
+            property: 'borderRightWidth',
+            values: [right],
+          },
+        ];
+      },
+    },
+  ],
 };
 
 export const viewAliasMatcher = createAliasMatcher(viewAlias);
