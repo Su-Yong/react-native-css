@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test:babel": "npm run test -w @suyongs/babel-plugin-react-native-css",
-    "test:core": "npm run test -w @suyongs/react-native-css"
+    "test:core": "npm run test -w @suyongs/react-native-css",
+    "test": "npm run test:core && npm run test:babel"
   },
   "keywords": [],
   "author": "",
