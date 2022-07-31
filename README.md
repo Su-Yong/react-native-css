@@ -1,7 +1,7 @@
 # react-native-css
 A fastest way to write react-native styles
 
-Work In Progress...
+**Work In Progress...**
 
 # Features
 * Support CSS shorthand properties
@@ -31,7 +31,7 @@ import ReactNativeCSS from '@suyongs/babel-plugin-react-native-css';
 export default {
   // ...
   plugins: [
-    ReactNativeCSS(), // You must be insert this plugin before react-native-reanimated plugin
+    '@suyongs/babel-plugin-react-native-css', // You must be insert this plugin before react-native-reanimated/plugin
     'react-native-reanimated/plugin',
   ]
 }
