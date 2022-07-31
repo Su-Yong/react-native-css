@@ -120,4 +120,52 @@ describe('shorthand', () => {
       marginRight: 2,
     });
   });
+
+  it('inset', () => {
+    const inset1 = css`
+      position: absolute;  
+      inset: 4px;
+    `;
+    const inset2 = css`
+      position: absolute;  
+      inset: 4px 8px;
+    `;
+    const inset3 = css`
+      position: absolute;  
+      inset: 4px 8px 6px;
+    `;
+    const inset4 = css`
+      position: absolute;  
+      inset: 4px 8px 6px 2px;
+    `;
+
+    expect(inset1).toEqual({
+      position: 'absolute',
+      top: 4,
+      right: 4,
+      bottom: 4,
+      left: 4,
+    });
+    expect(inset2).toEqual({
+      position: 'absolute',
+      top: 4,
+      right: 8,
+      bottom: 4,
+      left: 8,
+    });
+    expect(inset3).toEqual({
+      position: 'absolute',
+      top: 4,
+      right: 8,
+      bottom: 6,
+      left: 8,
+    });
+    expect(inset4).toEqual({
+      position: 'absolute',
+      top: 4,
+      right: 8,
+      bottom: 6,
+      left: 2,
+    });
+  });
 });
