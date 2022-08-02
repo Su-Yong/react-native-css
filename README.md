@@ -6,8 +6,11 @@ A fastest way to write react-native styles
 # Features
 * Support CSS shorthand properties
 * Use CSS in **ZERO RUNTIME**
+* Support nested syntax (Working...)
+* Support css variable (TODO)
+* Customizable css function (TODO)
 * Integrate with react-native-reanimated, react-native-gesture-handler (TODO)
-* Support dynamic props style (TODO)
+* Support dynamic props style (Working...)
 * Written in typescript
 
 # Installation
@@ -135,7 +138,7 @@ const Button = () => {
   const animatedStyle = useButtonStyle(16, '#00a4ff');
 
   return (
-    <Styled.View css={animatedStyle.style}>
+    <Styled.View css={animatedStyle}>
       Press!
     </Styled.View>
   );
@@ -152,3 +155,4 @@ const Button = () => {
  - [X] Support shorthand property
  - [ ] Support dynamic properies
  - [ ] Integrate react-native-reanimated
+ - [ ] Integrate react-native-gesture-handler
