@@ -34,7 +34,7 @@ import ReactNativeCSS from '@suyongs/babel-plugin-react-native-css';
 export default {
   // ...
   plugins: [
-    '@suyongs/babel-plugin-react-native-css', // You must be insert this plugin before react-native-reanimated/plugin
+    '@suyongs/babel-plugin-react-native-css', // You must insert this plugin before react-native-reanimated/plugin
     'react-native-reanimated/plugin',
   ]
 }
