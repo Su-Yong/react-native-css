@@ -1,3 +1,4 @@
+import { ReactNativeStyle } from '../../types';
 import {
   Value,
   LengthType,
@@ -11,29 +12,29 @@ import {
   IdentType,
   StringType,
   NumberType,
-} from '../css/model';
+} from '../model';
 
-export const resolveCSSValue = (value: Value): unknown => {
+export const resolveCSSValue = (value: Value): ReactNativeStyle[keyof ReactNativeStyle] | Error => {
   if (value.type === LengthType) return value.value;
   if (value.type === AngleType) return value.radian;
   if (value.type === TimeType) return value.ms;
 
   if (value.type === PercentageType) return `${value.value}%`;
-  if (value.type === FunctionType) return '--not-supported';
+  if (value.type === FunctionType) return Error(`<function> is not supported in css. Try to use "ncss" instead "css"`);
 
   if (value.type === ColorType) {
     if ('red' in value) {
       return `rgba(${value.red}, ${value.green}, ${value.blue}, ${value.alpha})`;
     } else {
-      return '--not-supported';
+      return Error(`This <color> seem to be calculated. Try to use "ncss" instead "css"`);
     }
   }
-  if (value.type === GradientType) return '--not-supported';
-  if (value.type === URLType) return '--not-supported';
+  if (value.type === GradientType) return Error(`<gradient> is not supported in css. Try to use "ncss" instead "css"`);
+  if (value.type === URLType) return Error(`<url> is not supported in css. Try to use "ncss" instead "css"`);
 
   if (value.type === IdentType) return value.identifier;
   if (value.type === StringType) return value.value;
   if (value.type === NumberType) return value.value;
 
-  return '--invalid';
+  return Error(`Invalid value. Try to use "ncss" instead "css"`);
 };

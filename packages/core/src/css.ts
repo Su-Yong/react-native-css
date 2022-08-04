@@ -1,9 +1,9 @@
-import { parse } from './css/parser/parser';
+import { parseElement } from './css/parser/parser';
 import { Element } from './css/model/element';
 import { AliasProcessor } from './processor/alias';
 import { viewAliasMatcher } from './processor/alias/view';
 import { DehyphenProcessor } from './processor/dehyphen';
-import { resolveCSSValue } from './resolver/cssResolver';
+import { resolveCSSValue } from './css/resolver/cssResolver';
 import { Stringable, ReactNativeStyle } from './types';
 import { rawStringResolver } from './resolver/rawStringResolver';
 
@@ -16,7 +16,7 @@ export const css = (array: TemplateStringsArray, ...args: Stringable[]): ReactNa
   if (__DEV__) console.warn('css is running in compile time');
 
   const str = rawStringResolver(array, ...args);
-  const ast = parse(str);
+  const ast = parseElement(str);
 
   let tree: Element[] = ast as Element[];
   processors.forEach((processor) => {

@@ -1,12 +1,10 @@
-import { parse } from './css/parser';
+import { parseElement } from './css/parser';
 import { Element } from './css/model';
 import { rawStringResolver } from './resolver/rawStringResolver';
 import { Stringable, NativeCSSHook, ReactNativeStyle } from './types';
 import { DehyphenProcessor, AliasProcessor } from './processor';
 import { viewAliasMatcher } from './processor/alias/view';
-import { resolveCSSValue } from './resolver/cssResolver';
-import { useMemo } from 'react';
-import { resolveNCSSValue } from './resolver/ncssResolver';
+import { resolveNCSSValue } from './ncss/resolver/ncssResolver';
 
 const processors = [
   new DehyphenProcessor(),
@@ -18,7 +16,7 @@ export const ncss = (array: TemplateStringsArray, ...args: Stringable[]): Native
 
   const str = rawStringResolver(array, ...args);
 
-  let tree = parse(str);
+  let tree = parseElement(str);
   processors.forEach((processor) => {
     let newTree: Element[] = [];
 
@@ -40,7 +38,7 @@ export const ncss = (array: TemplateStringsArray, ...args: Stringable[]): Native
         if (element.type === 'declaration') {
           result = {
             ...result,
-            ...resolveNCSSValue(element, args),
+            ...resolveNCSSValue(element),
           };
         }
       });

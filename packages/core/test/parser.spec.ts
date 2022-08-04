@@ -1,9 +1,9 @@
-import { parse } from '../src/css/parser/parser';
-import { parseValue } from '../src/css/parser/value/valueParser';
+import { parseElement } from '../src/css/parser/parser';
+import { parseValue } from '../src/css/parser/value/parser';
 
 describe('parser', () => {
-  it('parse', () => {
-    parse(`
+  it('parse-test', () => {
+    console.log(JSON.stringify(parseElement(`
       background: red;
       width: 24px;
       height: 24px;
@@ -11,12 +11,12 @@ describe('parser', () => {
       /* this is comment */
       border-radius: 24px;
 
-      &:hover {
+      &:hover .test[attr="true"]#id {
         test: string;
         /* comment ; parser test } asdfasdf { asdfasdf  */
         test2: string;
       }
-    `);
+    `), null, 2));
   });
 });
 

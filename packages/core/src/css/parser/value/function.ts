@@ -1,6 +1,6 @@
 import { FunctionValue, Value } from '../../model/value';
 import { tokenizeValue } from '../../tokenizer/tokenizer';
-import { parseValue } from './valueParser';
+import { parseValue } from './parser';
 
 const functionRegex = /^([a-zA-Z\-]+)\((.*)\)$/;
 export const functionValue = (str: string): FunctionValue<Value[]> => {
