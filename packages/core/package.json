@@ -11,6 +11,7 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
+    "react-native-gesture-handler": "^2.0.0",
     "react-native-reanimated": "^2.0.0"
   },
   "devDependencies": {
@@ -19,6 +20,7 @@
     "@types/react-native": "^0.69.3"
   },
   "dependencies": {
-    "color": "^4.2.3"
+    "color": "^4.2.3",
+    "nanoid": "^4.0.0"
   }
 }

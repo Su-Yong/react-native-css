@@ -1,9 +1,10 @@
 import { Element, DeclarationElement, declarationRegex, isDeclarationElement, isRuleElement, ruleRegex, RuleElement } from '../model/element';
 import { tokenizeValue } from '../tokenizer/tokenizer';
-import { parseValue } from './value/valueParser';
+import { parseSelector } from './selector/parser';
+import { parseValue } from './value/parser';
 
 const commentRegex = /\/\*((?:(?:.|\s)(?!\*\/))+.|\s)\*\//g;
-export const parse = (str: string): Element[] => {
+export const parseElement = (str: string): Element[] => {
   const groups = tokenizeValue(
     str,
     {
@@ -40,8 +41,8 @@ export const parse = (str: string): Element[] => {
       const ruleElement: RuleElement = {
         type: 'rule',
         raw,
-        selector: selector.trim(),
-        elements: parse(body.trim()),
+        selectors: parseSelector(selector.trim()),
+        elements: parseElement(body.trim()),
       };
 
       elements.push(ruleElement);

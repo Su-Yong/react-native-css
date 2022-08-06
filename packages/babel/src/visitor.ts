@@ -3,7 +3,7 @@ import { DehyphenProcessor, AliasProcessor } from '@suyongs/react-native-css';
 import { viewAliasMatcher } from '@suyongs/react-native-css/src/processor/alias/view';
 import valueResolver, { ValueResolverContext } from './resolver/valueResolver';
 import { getUniqueId } from './utils/uniqueId';
-import { parse, Element } from '@suyongs/react-native-css';
+import { parseElement, Element } from '@suyongs/react-native-css';
 
 import { types as t } from '@babel/core';
 import { Program } from '@babel/types';
@@ -39,7 +39,7 @@ const visitor: Visitor<PluginPass> = {
         result += str;
       });
 
-      let ast: Element[] = parse(result);
+      let ast: Element[] = parseElement(result);
       processors.forEach((processor) => {
         let newTree: Element[] = [];
 

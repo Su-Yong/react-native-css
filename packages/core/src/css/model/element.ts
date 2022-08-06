@@ -1,3 +1,4 @@
+import { Selector } from './selector/selector';
 import { Value } from './value';
 
 export interface BaseElement<T extends string> {
@@ -10,7 +11,7 @@ export interface DeclarationElement extends BaseElement<'declaration'> {
   values: Value[];
 }
 export interface RuleElement extends BaseElement<'rule'> {
-  selector: string;
+  selectors: Selector[];
   elements: Element[];
 }
 export interface CommentElement extends BaseElement<'comment'> {
