@@ -52,11 +52,18 @@ export class AliasProcessor implements Processor {
   }
 
   process(element: Element): Element | Element[] {
-    if (element.type !== 'declaration') return element;
-    if (!this.matcher) return element;
+    if (element.type === 'declaration') {
+      if (!this.matcher) return element;
 
-    const executor = this.matcher(element.property, element.values);
-    
-    return executor?.(element) ?? [element];
+      const executor = this.matcher(element.property, element.values);
+      
+      return executor?.(element) ?? [element];
+    }
+
+    if (element.type === 'rule') {
+      element.elements = element.elements.flatMap((it) => this.process(it));
+    }
+
+    return element;
   }
 };
