@@ -7,7 +7,7 @@ import { Stringable, NativeCSSHook, ReactNativeStyle } from './types';
 import { DehyphenProcessor, AliasProcessor } from './processor';
 import { viewAliasMatcher } from './processor/alias/view';
 import { resolveNCSS } from './ncss/resolver/ncssResolver';
-import { CSSContext } from './ncss/model/context';
+import { CSSContext, Scope } from './ncss/model/context';
 
 const processors = [
   new DehyphenProcessor(),
@@ -46,17 +46,17 @@ export const ncss = (array: TemplateStringsArray, ...args: Stringable[]): Native
       type: 0,
     },
   };
-  const rootScope = {
+  const rootScope: Scope = {
     selectors: [rootSelector],
     parent: null,
+    variables: [],
   };
 
   const ncssDescriber = resolveNCSS(tree, rootScope);
-  console.log('ncssDescriber', JSON.stringify(ncssDescriber, null, 2));
+  console.log('ncssDescriber', JSON.stringify(ncssDescriber, null, 2), ncssDescriber);
 
   return (...args) => {
     const context: CSSContext = {
-      variables: [],
       params: args,
       scope: rootScope,
     };

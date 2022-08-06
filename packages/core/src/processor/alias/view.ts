@@ -1,4 +1,4 @@
-import { ColorType, IdentType, LengthType, PercentageType } from '../../css/model/value';
+import { ColorType, FunctionType, IdentType, LengthType, PercentageType } from '../../css/model';
 import { AliasMap, createAliasMatcher, keyChangeExecutor } from '../alias';
 import { borderAlias } from './border';
 import { createDirectionalAlias } from './directional';
@@ -6,7 +6,7 @@ import { createDirectionalAlias } from './directional';
 const viewAlias: AliasMap = {
   background: [
     {
-      types: [ColorType],
+      types: [[ColorType, FunctionType]],
       executor: keyChangeExecutor('backgroundColor'),
     },
   ],
@@ -39,7 +39,7 @@ const viewAlias: AliasMap = {
   ),
   inset: [
     {
-      types: [[LengthType, PercentageType]],
+      types: [[LengthType, PercentageType, FunctionType]],
       executor: (element) => [
         {
           type: 'declaration',

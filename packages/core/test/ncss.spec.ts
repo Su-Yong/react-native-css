@@ -24,18 +24,18 @@ describe('ncss runtime', () => {
     });
   });
 
-  xit('nested', () => {
+  it('variable', () => {
     const useStyle = ncss`
-      fontSize: param(0); /* param(0) means first parameter of useButtonStyle hook */
-    
-      padding: 4px 8px;
-      border: solid 1px param(1);
+      background: var(--color, blue);
 
-
+      &:hover {
+        --color: red;
+        background: var(--color, blue);
+      }
     `;
 
-    const style1 = useStyle(14, '#00a4ff');
+    const style1 = useStyle();
 
-    console.log('nested', JSON.stringify(style1.style, null, 2));
+    console.log('variable', JSON.stringify(style1.style, null, 2));
   });
 });

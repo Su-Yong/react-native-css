@@ -2,7 +2,7 @@ import { Element } from '../css/model/element';
 
 import Processor from './processor';
 
-const dehyphenRegex = /(\-[a-z])/g;
+const dehyphenRegex = /(?<!\-)(\-[a-z])/g;
 
 export class DehyphenProcessor implements Processor {
   process(element: Element): Element | Element[] {

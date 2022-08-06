@@ -1,21 +1,5 @@
-import {
-  Value,
-  LengthType,
-  AngleType,
-  TimeType,
-  PercentageType,
-  FunctionType,
-  ColorType,
-  GradientType,
-  URLType,
-  IdentType,
-  StringType,
-  NumberType,
-  DeclarationElement,
-  Element,
-} from '../../css/model';
-import { resolveCSSValue } from '../../css/resolver/cssResolver';
-import { CSSContext, Scope } from '../model/context';
+import { Element } from '../../css/model';
+import { Scope } from '../model/context';
 import { NCSSObject } from '../model/describer';
 import { resolveNCSSValue } from './ncssValueResolver';
 
@@ -30,7 +14,7 @@ export const resolveNCSS = (
       if (element.type === 'declaration') {
         const value = resolveNCSSValue(element.values[0], scope);
         const property = element.property as keyof typeof style;
-  
+
         if (value instanceof Error) {}
         else {
           const selectors = [];
@@ -46,8 +30,15 @@ export const resolveNCSS = (
 
           const selector = selectors.join('');
 
-          if (!style[property]) style[property] = {};
-          style[property]![selector] = value as any;
+          if (property.substring(0, 2) === '--') {
+            scope.variables.push({
+              identifier: property,
+              value: element.values[0],
+            });
+          } else {
+            if (!style[property]) style[property] = {};
+            style[property]![selector] = value as any;
+          }
         }
       }
 
@@ -55,6 +46,7 @@ export const resolveNCSS = (
         createObject(element.elements, {
           selectors: element.selectors,
           parent: scope,
+          variables: [],
         });
       }
     });

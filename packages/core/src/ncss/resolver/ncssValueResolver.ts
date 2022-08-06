@@ -1,5 +1,5 @@
 import { Value, LengthType, AngleType, TimeType, PercentageType, FunctionType, NumberType, ColorType, GradientType, URLType, IdentType, StringType } from '../../css/model';
-import { CSSContext, Scope } from '../model/context';
+import { CSSContext, Scope, Variable } from '../model/context';
 
 export const resolveNCSSValue = (
   value: Value,
@@ -23,7 +23,7 @@ export const resolveNCSSValue = (
         if (result === undefined) {
           const resolvedValue = resolveNCSSValue(value.parameters[1], scope);
 
-          if (typeof resolvedValue === 'function') result = resolvedValue;
+          if (typeof resolvedValue === 'function') result = resolvedValue(context);
           else result = resolvedValue;
         }
 
@@ -32,9 +32,25 @@ export const resolveNCSSValue = (
     }
     if (value.name === 'var') {
       if (value.parameters[0].type !== '<ident>') return Error(`"param" function's param type must be <ident>, <any>?`);
+      
+      const { identifier } = value.parameters[0];
+      let variable: Variable<Value> | null = null;
+      let nowScope: Scope | null = scope;
+      do {
+        variable = nowScope?.variables.find((it) => it.identifier === identifier) ?? null;
+        nowScope = nowScope?.parent ?? null;
+      } while(!variable && nowScope)
 
       return (context: CSSContext) => {
-        throw Error('TODO');
+        const resolvedValue = resolveNCSSValue(
+          variable?.value
+            ? variable.value
+            : value.parameters[1],
+          scope,
+        );
+
+        if (typeof resolvedValue === 'function') return resolvedValue(context);
+        return resolvedValue;
       };
     }
   }

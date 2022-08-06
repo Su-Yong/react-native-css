@@ -1,4 +1,4 @@
-import { DeclarationElement, LengthType, PercentageType, Value } from '../../css/model';
+import { DeclarationElement, FunctionType, LengthType, PercentageType, Value } from '../../css/model';
 import { AliasRule } from '../alias';
 
 export type DirectionalName = (name: string) => string;
@@ -39,6 +39,7 @@ const createDirectionalElements = (
   },
 ]);
 
+const AllowType = [LengthType, PercentageType, FunctionType];
 export const createDirectionalAlias = (
   name: (direction: string) => string,
   rawName: (direction: string) => string,
@@ -47,7 +48,7 @@ export const createDirectionalAlias = (
 
   return [
     {
-      types: [[LengthType, PercentageType], [LengthType, PercentageType]],
+      types: [AllowType, AllowType],
       executor: (element) => {
         const vertical = element.values[0];
         const horizontal = element.values[1];
@@ -56,7 +57,7 @@ export const createDirectionalAlias = (
       },
     },
     {
-      types: [[LengthType, PercentageType], [LengthType, PercentageType], [LengthType, PercentageType]],
+      types: [AllowType, AllowType, AllowType],
       executor: (element) => {
         const top = element.values[0];
         const horizontal = element.values[1];
@@ -66,7 +67,7 @@ export const createDirectionalAlias = (
       },
     },
     {
-      types: [[LengthType, PercentageType], [LengthType, PercentageType], [LengthType, PercentageType], [LengthType, PercentageType]],
+      types: [AllowType, AllowType, AllowType, AllowType],
       executor: (element) => {
         const top = element.values[0];
         const right = element.values[1];
