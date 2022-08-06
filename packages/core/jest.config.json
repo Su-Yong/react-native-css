@@ -1,7 +1,9 @@
 {
-  "preset": "ts-jest",
   "testEnvironment": "node",
   "testRegex": "/test/.*\\.spec\\.ts",
+  "transform": {
+    "^.+\\.[jt]sx?$": "ts-jest"
+  },
   "setupFilesAfterEnv": [
     "<rootDir>/test/jest.setup.ts"
   ],
@@ -10,8 +12,10 @@
     "<rootDir>/src"
   ],
   "moduleNameMapper": {
-    "^babel-plugin-react-native-css$": "<rootDir>/src"
+    "^babel-plugin-react-native-css$": "<rootDir>/src",
+    "^nanoid(/(.*)|$)": "nanoid$1"
   },
+  "transformIgnorePatterns": ["/node_modules/(?!nanoid)"],
   "coveragePathIgnorePatterns": [
     ".vscode",
     "node_modules/",

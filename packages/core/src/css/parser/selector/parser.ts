@@ -39,6 +39,7 @@ export const parseSelector = (str: string): Selector[] => {
     }
 
     result.push({
+      raw: str,
       id: ids,
       class: classes,
       pseudoClass: pseudoClasses,

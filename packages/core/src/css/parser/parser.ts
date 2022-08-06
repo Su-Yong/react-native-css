@@ -1,6 +1,6 @@
 import { Element, DeclarationElement, declarationRegex, isDeclarationElement, isRuleElement, ruleRegex, RuleElement } from '../model/element';
 import { tokenizeValue } from '../tokenizer/tokenizer';
-import { parseSelector } from './selector/parse';
+import { parseSelector } from './selector/parser';
 import { parseValue } from './value/parser';
 
 const commentRegex = /\/\*((?:(?:.|\s)(?!\*\/))+.|\s)\*\//g;

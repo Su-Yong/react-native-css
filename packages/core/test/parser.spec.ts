@@ -2,7 +2,7 @@ import { parseElement } from '../src/css/parser/parser';
 import { parseValue } from '../src/css/parser/value/parser';
 
 describe('parser', () => {
-  it('parse-test', () => {
+  xit('parse', () => {
     console.log(JSON.stringify(parseElement(`
       background: red;
       width: 24px;

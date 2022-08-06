@@ -29,9 +29,9 @@ export const resolveNCSSValue = (
   if (value.type === PercentageType) return `${value.value}%`;
   if (value.type === FunctionType) {
     if (value.name === 'param') {
-      if (value.parameters[0].type !== '<ident>') return Error(`"param" function's param type must be <ident>, <any>?`);
+      if (value.parameters[0].type !== NumberType) return Error(`"param" function's param type must be ${NumberType}, <any>?`);
       
-      const index = Number(value.parameters[0].identifier);
+      const index = value.parameters[0].value;
       if (!Number.isFinite(index)) return Error(`index must be finite number`);
  
       return (context: CSSContext) => {
@@ -51,15 +51,7 @@ export const resolveNCSSValue = (
       if (value.parameters[0].type !== '<ident>') return Error(`"param" function's param type must be <ident>, <any>?`);
 
       return (context: CSSContext) => {
-        context.variables.find((it) => it.scope === 'scope')
-        if (result === undefined) {
-          const resolvedValue = resolveNCSSValue(value.parameters[1], scope);
-
-          if (typeof resolvedValue === 'function') result = resolvedValue;
-          else result = resolvedValue;
-        }
-
-        return result;
+        throw Error('TODO');
       };
     }
   }
@@ -74,7 +66,7 @@ export const resolveNCSSValue = (
   if (value.type === GradientType) return {};
   if (value.type === URLType) return {};
 
-  if (value.type === IdentType) return { [element.property]: value.identifier };
+  if (value.type === IdentType) return value.identifier;
   if (value.type === StringType) return value.value;
   if (value.type === NumberType) return value.value;
 
@@ -89,9 +81,11 @@ export const resolveNCSS = <Context, Selectors extends string>(
   const createObject = (elements: Element[], selector: Selectors) => {
     elements.forEach((element) => {
       if (element.type === 'declaration') {
-        const value = resolveCSSValue(element.values[0]);
+        const value = resolveNCSSValue(element.values[0], selector);
         const property = element.property as keyof typeof style;
   
+        // console.log('ncss resolve', property, value);
+
         if (value instanceof Error) {}
         else {
           if (!style[property]) style[property] = {};
@@ -100,7 +94,7 @@ export const resolveNCSS = <Context, Selectors extends string>(
       }
 
       if (element.type === 'rule') {
-        createObject(element.elements, element.selector as Selectors);
+        createObject(element.elements, element.selectors.map((it) => it.raw).join(' ') as Selectors);
       }
     });
   };
