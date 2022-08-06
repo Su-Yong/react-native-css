@@ -31,8 +31,6 @@ export const resolveNCSS = (
         const value = resolveNCSSValue(element.values[0], scope);
         const property = element.property as keyof typeof style;
   
-        // console.log('ncss resolve', property, value);
-
         if (value instanceof Error) {}
         else {
           const selectors = [];
@@ -47,7 +45,6 @@ export const resolveNCSS = (
           } while (nowScope = nowScope.parent)
 
           const selector = selectors.join('');
-          console.log('selector!', selector);
 
           if (!style[property]) style[property] = {};
           style[property]![selector] = value as any;
