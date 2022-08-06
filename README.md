@@ -153,6 +153,8 @@ const Button = () => {
 # Roadmap
  - [X] Babel plugin
  - [X] Support shorthand property
- - [ ] Support dynamic properies
+ - [X] Support dynamic properies
+ - [ ] Support CSS Variable
+ - [X] Support nested syntax
  - [ ] Integrate react-native-reanimated
  - [ ] Integrate react-native-gesture-handler
