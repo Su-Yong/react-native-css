@@ -1,8 +1,9 @@
 import { ReactNativeStyle } from '../../types';
+import { CSSContext } from './context';
 
-export type NCSSObject<C, Selectors extends string> = {
+export type NCSSObject = {
   [Key in keyof ReactNativeStyle]: {
-    [selector in Selectors]?: ReactNativeStyle[Key] | ((context: C) => ReactNativeStyle[Key]);
+    [selector in string]?: ReactNativeStyle[Key] | ((context: CSSContext) => ReactNativeStyle[Key]);
   };
 };
 

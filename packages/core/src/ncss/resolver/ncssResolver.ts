@@ -15,90 +15,54 @@ import {
   Element,
 } from '../../css/model';
 import { resolveCSSValue } from '../../css/resolver/cssResolver';
-import { CSSContext } from '../model/context';
+import { CSSContext, Scope } from '../model/context';
 import { NCSSObject } from '../model/describer';
+import { resolveNCSSValue } from './ncssValueResolver';
 
-export const resolveNCSSValue = (
-  value: Value,
-  scope: string,
-): Error | unknown | ((context: CSSContext) => unknown) => {
-  if (value.type === LengthType) return value.value;
-  if (value.type === AngleType) return value.radian;
-  if (value.type === TimeType) return value.ms;
-
-  if (value.type === PercentageType) return `${value.value}%`;
-  if (value.type === FunctionType) {
-    if (value.name === 'param') {
-      if (value.parameters[0].type !== NumberType) return Error(`"param" function's param type must be ${NumberType}, <any>?`);
-      
-      const index = value.parameters[0].value;
-      if (!Number.isFinite(index)) return Error(`index must be finite number`);
- 
-      return (context: CSSContext) => {
-        let result = context.params.at(index);
-
-        if (result === undefined) {
-          const resolvedValue = resolveNCSSValue(value.parameters[1], scope);
-
-          if (typeof resolvedValue === 'function') result = resolvedValue;
-          else result = resolvedValue;
-        }
-
-        return result;
-      };
-    }
-    if (value.name === 'var') {
-      if (value.parameters[0].type !== '<ident>') return Error(`"param" function's param type must be <ident>, <any>?`);
-
-      return (context: CSSContext) => {
-        throw Error('TODO');
-      };
-    }
-  }
-
-  if (value.type === ColorType) {
-    if ('red' in value) {
-      return `rgba(${value.red}, ${value.green}, ${value.blue}, ${value.alpha})`;
-    } else {
-      return '';
-    }
-  }
-  if (value.type === GradientType) return {};
-  if (value.type === URLType) return {};
-
-  if (value.type === IdentType) return value.identifier;
-  if (value.type === StringType) return value.value;
-  if (value.type === NumberType) return value.value;
-
-  return () => {};
-};
-
-export const resolveNCSS = <Context, Selectors extends string>(
+export const resolveNCSS = (
   tree: Element[],
-): NCSSObject<Context, Selectors> => {
-  let style: NCSSObject<Context, Selectors> = {};
+  rootScope: Scope,
+): NCSSObject => {
+  let style: NCSSObject = {};
 
-  const createObject = (elements: Element[], selector: Selectors) => {
+  const createObject = (elements: Element[], scope: Scope) => {
     elements.forEach((element) => {
       if (element.type === 'declaration') {
-        const value = resolveNCSSValue(element.values[0], selector);
+        const value = resolveNCSSValue(element.values[0], scope);
         const property = element.property as keyof typeof style;
   
         // console.log('ncss resolve', property, value);
 
         if (value instanceof Error) {}
         else {
+          const selectors = [];
+
+          let nowScope: Scope | null = scope;
+          do {
+            selectors.unshift(
+              nowScope.selectors
+                .map((selector) => selector.raw.replace(/^&/, ''))
+                .join(' '),
+            );
+          } while (nowScope = nowScope.parent)
+
+          const selector = selectors.join('');
+          console.log('selector!', selector);
+
           if (!style[property]) style[property] = {};
           style[property]![selector] = value as any;
         }
       }
 
       if (element.type === 'rule') {
-        createObject(element.elements, element.selectors.map((it) => it.raw).join(' ') as Selectors);
+        createObject(element.elements, {
+          selectors: element.selectors,
+          parent: scope,
+        });
       }
     });
   };
-  createObject(tree, '&' as Selectors);
+  createObject(tree, rootScope);
 
   return style;
 };

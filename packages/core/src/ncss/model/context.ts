@@ -1,13 +1,18 @@
 import { Value, Selector } from '../../css/model';
 
+export type Scope = {
+  selectors: Selector[];
+  parent: Scope | null;
+};
+
 export interface Variable<T extends Value> {
   identifier: string;
   value: T;
-  scope: Selector;
+  scope: Scope;
 }
 
 export interface CSSContext {
   variables: Variable<Value>[];
   params: any[];
-  scope: Selector;
+  scope: Scope;
 }

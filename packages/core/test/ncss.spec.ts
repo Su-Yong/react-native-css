@@ -23,4 +23,18 @@ describe('ncss runtime', () => {
       backgroundColor: 'rgba(0, 128, 0, 1)',
     });
   });
+
+  it('nested', () => {
+    const useStyle = ncss`
+      background: red;
+
+      &:hover {
+        background: blue;
+      }
+    `;
+
+    const style1 = useStyle();
+
+    console.log('nested', JSON.stringify(style1.style, null, 2));
+  });
 });

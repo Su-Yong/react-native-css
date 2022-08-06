@@ -6,7 +6,7 @@ import { rawStringResolver } from './resolver/rawStringResolver';
 import { Stringable, NativeCSSHook, ReactNativeStyle } from './types';
 import { DehyphenProcessor, AliasProcessor } from './processor';
 import { viewAliasMatcher } from './processor/alias/view';
-import { resolveNCSS, resolveNCSSValue } from './ncss/resolver/ncssResolver';
+import { resolveNCSS } from './ncss/resolver/ncssResolver';
 import { CSSContext } from './ncss/model/context';
 
 const processors = [
@@ -33,9 +33,8 @@ export const ncss = (array: TemplateStringsArray, ...args: Stringable[]): Native
     tree = newTree;
   });
 
-  const ncssDescriber = resolveNCSS(tree);
   const rootId = nanoid();
-  const rootScope = {
+  const rootSelector = {
     raw: `#${rootId}`,
     id: [rootId],
     class: [],
@@ -47,8 +46,14 @@ export const ncss = (array: TemplateStringsArray, ...args: Stringable[]): Native
       type: 0,
     },
   };
+  const rootScope = {
+    selectors: [rootSelector],
+    parent: null,
+  };
 
-  console.log('ncss', JSON.stringify(tree, null, 2), JSON.stringify(ncssDescriber, null, 2));
+  const ncssDescriber = resolveNCSS(tree, rootScope);
+  console.log('ncssDescriber', JSON.stringify(ncssDescriber, null, 2));
+
   return (...args) => {
     const context: CSSContext = {
       variables: [],
@@ -58,10 +63,12 @@ export const ncss = (array: TemplateStringsArray, ...args: Stringable[]): Native
 
     const style: ReactNativeStyle = {};
     Object.entries(ncssDescriber).forEach(([key, value]) => {
-      if (typeof value['&'] === 'function') {
-        style[key as keyof ReactNativeStyle] = value['&'](context) as any;
+      const targetValue = value[rootSelector.raw];
+
+      if (typeof targetValue === 'function') {
+        style[key as keyof ReactNativeStyle] = targetValue(context) as any;
       } else {
-        style[key as keyof ReactNativeStyle] = value['&'] as any;
+        style[key as keyof ReactNativeStyle] = targetValue as any;
       }
     });
 
