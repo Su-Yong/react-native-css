@@ -24,16 +24,17 @@ describe('ncss runtime', () => {
     });
   });
 
-  it('nested', () => {
+  xit('nested', () => {
     const useStyle = ncss`
-      background: red;
+      fontSize: param(0); /* param(0) means first parameter of useButtonStyle hook */
+    
+      padding: 4px 8px;
+      border: solid 1px param(1);
 
-      &:hover {
-        background: blue;
-      }
+
     `;
 
-    const style1 = useStyle();
+    const style1 = useStyle(14, '#00a4ff');
 
     console.log('nested', JSON.stringify(style1.style, null, 2));
   });
