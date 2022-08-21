@@ -1,3 +1,9 @@
+interface Trie {
+  char: string | null;
+  data: string | null;
+  children: Trie[];
+}
+
 interface TokenizeOptions {
   dividers: string[];
   escape: string[];
@@ -20,6 +26,33 @@ export const tokenizeValue = (source: string, options: TokenizeOptions = default
   let escape: string | null = null;
 
   const str: string[] = [''];
+  const trie: Trie = {
+    char: null,
+    data: null,
+    children: [],
+  };
+
+  options.dividers.forEach((divider) => {
+    let nowTrie: Trie = trie;
+
+    divider.split('').forEach((char, index) => {
+      let child = nowTrie.children.find((it) => it.char === char);
+      if (!child) {
+        child = {
+          char,
+          data: null,
+          children: [],
+        };
+
+        nowTrie.children.push(child);
+      };
+
+      if (index === divider.length - 1) {
+        child.data = divider;
+      }
+    });
+  });
+
   Array.from(source)
     .forEach((char, index) => {
       if (levels.every((level) => level === 0) && escape === null && options.dividers.includes(char)) {
@@ -43,6 +76,6 @@ export const tokenizeValue = (source: string, options: TokenizeOptions = default
         if (closeLevelIndex >= 0) levels[closeLevelIndex] -= 1;
       }
     });
- 
+
   return str;
 };

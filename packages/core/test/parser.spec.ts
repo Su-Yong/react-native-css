@@ -2,20 +2,9 @@ import { parseElement } from '../src/css/parser/parser';
 import { parseValue } from '../src/css/parser/value/parser';
 
 describe('parser', () => {
-  xit('parse', () => {
+  it('parse', () => {
     console.log(JSON.stringify(parseElement(`
-      background: red;
-      width: 24px;
-      height: 24px;
-
-      /* this is comment */
-      border-radius: 24px;
-
-      &:hover .test[attr="true"]#id {
-        test: string;
-        /* comment ; parser test } asdfasdf { asdfasdf  */
-        test2: string;
-      }
+      background: calc(10% / 7 * calc(var(--test, red) + 10px)));
     `), null, 2));
   });
 });

@@ -29,12 +29,12 @@ describe('ncss runtime', () => {
       background: var(--color, blue);
 
       &:hover {
-        --color: red;
+        --color: param(0, red);
         background: var(--color, blue);
       }
     `;
 
-    const style1 = useStyle();
+    const style1 = useStyle('green');
 
     console.log('variable', JSON.stringify(style1.style, null, 2));
   });

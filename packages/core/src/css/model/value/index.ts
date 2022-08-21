@@ -4,3 +4,4 @@ export * from './image';
 export * from './keyword';
 export * from './type';
 export * from './value';
+export * from './function';
