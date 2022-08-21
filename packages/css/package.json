@@ -1,0 +1,13 @@
+{
+  "name": "@suyongs/react-native-css-parser",
+  "version": "0.1.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Su-Yong",
+  "license": "MIT",
+  "dependencies": {
+  }
+}
